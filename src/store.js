@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    rooms: []
+    rooms: [],
+    roomId: ''
   },
   mutations: {
     getAllRooms(state, payload) {
@@ -16,10 +17,13 @@ export default new Vuex.Store({
     },
     emptyRooms(state) {
       state.rooms = []
+    },
+    fillRoomId(state, payload) {
+      state.roomId = payload
     }
   },
   actions: {
-    createRoom(context, payload) {
+    createRoom({commit}, payload) {
       let dict = 'abcdefghijklmnopqrstuvwxyz'
       let randomId = ''
       for (let i = 0; i < 10; i++) {
@@ -35,11 +39,12 @@ export default new Vuex.Store({
       db.collection('rooms')
         .add({
           name: payload.roomName,
-          players: [player],
-          status: false
+          players: [],
+          status: true
         })
         .then(function (docRef) {
-          console.log(docRef, 'ini roomnya <<<<<<<<<<<<<<<<<')
+          // console.log(docRef, 'ini roomnya <<<<<<<<<<<<<<<<<')
+          commit.fillRoomId(docRef.id)
         })
         .catch(err => {
           console.log(err)
@@ -48,7 +53,6 @@ export default new Vuex.Store({
     getAllRooms({
       commit
     }) {
-
       let rooms = []
       db.collection('rooms')
         .onSnapshot(querySnapshot => {
@@ -57,11 +61,12 @@ export default new Vuex.Store({
               id: doc.id,
               ...doc.data()
             };
-
             rooms.push(data)
           });
+
           commit('emptyRooms')
           commit('getAllRooms', rooms)
+          rooms = []
         })
     },
     joinRoom({
@@ -84,7 +89,15 @@ export default new Vuex.Store({
           players: firebase.firestore.FieldValue.arrayUnion(player)
         })
         .then(() => {
-          console.log('Successfuly join room')
+          return db.collection('rooms').doc(payload.roomId).get()
+        })
+        .then(doc => {
+          // console.log(doc.data(), 'this data <<<<<<<<<<<<<<')
+          if (doc.data().players.length >= 4) {
+            db.collection('rooms').doc(payload.roomId).update({status: false})
+          } else {
+            console.log('Successfuly join room')
+          }
         })
         .catch(err => {
           console.log(err)
