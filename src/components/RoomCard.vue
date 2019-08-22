@@ -6,19 +6,20 @@
       </div>
     </div>
     <div class="info p-2 d-flex flex-column">
-      <h2 class="mb-3 align-self-center">Room 1</h2>
-      <h5 class="count pb-2">Players count: 2 / 5</h5>
+      <h2 class="mb-3 align-self-center">{{room.name}}</h2>
+      <h5 class="count pb-2">Players count: {{room.players.length}} / 4</h5>
       <h6>Player list:</h6>
       <ul>
-        <li>1. tono</li>
-        <li>2. badu</li>
+        <li v-for="player in room.players" :key="player.id">{{player.username}}</li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["room"]
+};
 </script>
 
 <style scoped>
@@ -29,6 +30,7 @@ export default {};
   position: relative;
   top: 0;
   transition: 0.2s;
+  height: 100%;
 }
 
 button {

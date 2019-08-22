@@ -5,8 +5,10 @@
       <!-- modal -->
       <div>
         <b-modal id="modal-1" title="Create Room">
-          <form @submit.prevent="createRoom(roomName)">
-            <b-form-input placeholder="Enter room name" v-model="roomName"></b-form-input>
+          <form @submit.prevent="createRoom()">
+            <b-form-input placeholder="Enter room name" v-model="initRoom.roomName"></b-form-input>
+            <label for class="mt-3">Player Name:</label>
+            <b-form-input placeholder="Your name" v-model="initRoom.roomMasterName"></b-form-input>
             <input type="submit" v-show="false" />
           </form>
           <div slot="modal-footer"></div>
@@ -30,14 +32,17 @@ export default {
   },
   data() {
     return {
-      roomName: ""
+      initRoom: {
+        roomName: "",
+        roomMasterName: ""
+      }
     };
   },
   methods: {
     createRoom(payload) {
-      this.roomName = ""
-      this.$bvModal.hide('modal-1')
-      this.$store.dispatch('createRoom', payload)
+      this.roomName = "";
+      this.$bvModal.hide("modal-1");
+      this.$store.dispatch("createRoom", this.initRoom);
     }
   }
 };
