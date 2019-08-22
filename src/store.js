@@ -11,6 +11,8 @@ export default new Vuex.Store({
 
   },
   actions: {
-
+    createRoom(context, payload) {
+      console.log(payload)
+    }
   }
 })
