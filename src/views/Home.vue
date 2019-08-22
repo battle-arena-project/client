@@ -23,7 +23,7 @@
 
 <script>
 import RoomsList from "@/components/RoomsList.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "home",
@@ -44,6 +44,9 @@ export default {
       this.$bvModal.hide("modal-1");
       this.$store.dispatch("createRoom", this.initRoom);
     }
+  },
+  computed: {
+    ...mapGetters(["roomId"])
   }
 };
 </script>

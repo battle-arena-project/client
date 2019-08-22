@@ -2,7 +2,8 @@
   <div class="room m-4">
     <div class="image">
       <div class="layer d-flex flex-column justify-content-center align-items-center">
-        <button class="btn btn-success px-5" @click="clickJoin">JOIN</button>
+        <h3 v-if="!room.status">Playing ...</h3>
+        <button class="btn btn-success px-5" @click="clickJoin" v-if="room.status">JOIN</button>
         <form @submit.prevent="joinRoom(room.id)">
           <b-form-input
             v-model="username"
@@ -39,13 +40,19 @@ export default {
       this.isClickJoin = !this.isClickJoin;
     },
     joinRoom(id) {
+      this.isClickJoin = !this.isClickJoin;
       this.$store.dispatch("joinRoom", { username: this.username, roomId: id });
+      this.$router.push(`/arena/${id}`);
     }
   }
 };
 </script>
 
 <style scoped>
+h3 {
+  color: rgb(255, 255, 255);
+  text-shadow: 0 0 5px rgb(26, 26, 26);
+}
 .room {
   font-family: "Oswald";
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.602);
