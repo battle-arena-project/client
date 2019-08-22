@@ -8,7 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     rooms: [],
-    roomId: ''
+    roomId: '',
+    players: [],
   },
   mutations: {
     getAllRooms(state, payload) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     fillRoomId(state, payload) {
       state.roomId = payload
+    },
+    fill(state, payload) {
+      state.players = payload
     }
   },
   actions: {
@@ -102,6 +106,13 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
+    },
+    fillPlayer(context, id) {
+      db.collection('rooms').doc(id).get()
+        .then(doc => {
+          context.commit('fill', doc.data().players)
+        })
+        .catch(console.log)
     }
   }
 })

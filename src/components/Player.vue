@@ -1,7 +1,8 @@
 <template>
   <div class="player-container">
     <div class="username">
-      <h2>Player</h2>
+      <!-- <h1>{{health}}</h1> -->
+      <h2>{{player.username}}</h2>
     </div>
     <div class="hp-container">
       <div class="hp"></div>
@@ -12,7 +13,7 @@
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
     </div>
-    <div class="player-attack">
+    <div @click="damage" class="player-attack">
       <h2>Attack</h2>
     </div>
   </div>
@@ -20,7 +21,17 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      health: 100
+    };
+  },
+  methods: {
+    damage() {
+      this.health -= 1;
+    }
+  },
+  props: ['player']
 }
 </script>
 
