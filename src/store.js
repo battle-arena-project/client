@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import db from './apis/firebase'
+import firebase from 'firebase/app'
 
 Vue.use(Vuex)
 
@@ -10,19 +11,21 @@ export default new Vuex.Store({
   },
   mutations: {
     getAllRooms(state, payload) {
+      state.rooms = []
       state.rooms = payload
-      console.log(state.rooms)
+    },
+    emptyRooms(state) {
+      state.rooms = []
     }
   },
   actions: {
     createRoom(context, payload) {
-      console.log(payload, 'ini payload nya')
       let dict = 'abcdefghijklmnopqrstuvwxyz'
       let randomId = ''
       for (let i = 0; i < 10; i++) {
         randomId += dict[Math.floor(Math.random() * dict.length)]
       }
-      console.log(randomId)
+
       let player = {
         id: randomId,
         username: payload.roomMasterName,
@@ -45,10 +48,10 @@ export default new Vuex.Store({
     getAllRooms({
       commit
     }) {
+
       let rooms = []
       db.collection('rooms')
         .onSnapshot(querySnapshot => {
-
           querySnapshot.forEach(doc => {
             let data = {
               id: doc.id,
@@ -57,8 +60,34 @@ export default new Vuex.Store({
 
             rooms.push(data)
           });
-          
+          commit('emptyRooms')
           commit('getAllRooms', rooms)
+        })
+    },
+    joinRoom({
+      commit
+    }, payload) {
+      let dict = 'abcdefghijklmnopqrstuvwxyz'
+      let randomId = ''
+      for (let i = 0; i < 10; i++) {
+        randomId += dict[Math.floor(Math.random() * dict.length)]
+      }
+      let player = {
+        id: randomId,
+        username: payload.username,
+        hp: 200
+      }
+
+      db.collection('rooms')
+        .doc(payload.roomId)
+        .update({
+          players: firebase.firestore.FieldValue.arrayUnion(player)
+        })
+        .then(() => {
+          console.log('Successfuly join room')
+        })
+        .catch(err => {
+          console.log(err)
         })
     }
   }

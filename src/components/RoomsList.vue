@@ -16,7 +16,9 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["rooms"])
+    rooms() {
+      return this.$store.state.rooms
+    }
   },
   created() {
     this.$store.dispatch("getAllRooms");
