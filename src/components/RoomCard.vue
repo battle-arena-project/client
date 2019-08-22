@@ -1,8 +1,17 @@
 <template>
   <div class="room m-4">
     <div class="image">
-      <div class="layer d-flex justify-content-center align-items-center">
-        <button class="btn btn-success px-5">JOIN</button>
+      <div class="layer d-flex flex-column justify-content-center align-items-center">
+        <button class="btn btn-success px-5" @click="clickJoin">JOIN</button>
+        <form @submit.prevent="joinRoom(room.id)">
+          <b-form-input
+            v-model="username"
+            placeholder="Enter username"
+            v-if="isClickJoin"
+            class="mt-2"
+          ></b-form-input>
+          <input type="submit" v-show="false" />
+        </form>
       </div>
     </div>
     <div class="info p-2 d-flex flex-column">
@@ -18,7 +27,21 @@
 
 <script>
 export default {
-  props: ["room"]
+  props: ["room"],
+  data() {
+    return {
+      isClickJoin: false,
+      username: ""
+    };
+  },
+  methods: {
+    clickJoin() {
+      this.isClickJoin = !this.isClickJoin;
+    },
+    joinRoom(id) {
+      this.$store.dispatch("joinRoom", { username: this.username, roomId: id });
+    }
+  }
 };
 </script>
 
