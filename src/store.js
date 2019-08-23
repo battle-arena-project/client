@@ -44,7 +44,12 @@ export default new Vuex.Store({
           break;
         }
       }
-      // console.log(state.players, "semuaaaaaaaaaaaaaaaaa")
+      db.collection('rooms')
+          .doc(payload.roomId)
+          .update({
+            players: payload.players,
+            standby: true,
+          })
     },
     setStandByState(state, payload) {
       state.standby = payload
