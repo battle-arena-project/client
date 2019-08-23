@@ -3,6 +3,7 @@
     <div class="arena">
       <Player :player="player" v-for="player in getPlayers" :key="player.id"></Player>
       <Time></Time>
+      <button @click="startGame">Start</button>
     </div>
   </div>
 
@@ -32,6 +33,11 @@ export default {
   created() {
     this.$store.dispatch('fillPlayer', this.$route.params.id)
     console.log(this.$route.params)
+  },
+  methods: {
+    startGame() {
+      this.$store.dispatch('startGame', {id: this.$route.params.id, players: this.$store.state.players})
+    }
   }
 }
 </script>
