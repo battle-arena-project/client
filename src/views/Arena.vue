@@ -7,7 +7,7 @@
         :key="player.id" 
         :standbyState="getRoomStandByState"
         :roomId="roomId"
-        :allPlayers="getPlayers"
+        v-on:changeHp="changePlayerHp"
         />
       <Time></Time>
       <button @click="startGame" v-if="!getRoomStandByState">Start</button>
@@ -26,6 +26,11 @@ export default {
       standby: false,
       roomId: this.$route.params.id,
     };
+  },
+  methods: {
+    changePlayerHp() {
+      this.$store.dispatch('fillPlayer', this.$route.params.id)
+    }
   },
   components : {
     Player,
