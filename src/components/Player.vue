@@ -28,7 +28,7 @@ import { setInterval } from 'timers';
 export default {
   data() {
     return {
-      health: 500,
+      health: this.player.hp,
       status: true,
       clickable: true,
       hpColor: '#1bd82a'
