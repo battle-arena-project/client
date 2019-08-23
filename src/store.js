@@ -39,7 +39,7 @@ export default new Vuex.Store({
       state.standby = payload
     },
     syncPlayers(state, payload) {
-      
+      state.players = payload
     }
   },
   actions: {
@@ -161,6 +161,8 @@ export default new Vuex.Store({
         .update({
           players: payload.players,
         })
+
+      context.commit('syncPlayers', payload.players)
     },
   }
 })
