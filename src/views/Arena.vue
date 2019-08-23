@@ -10,7 +10,7 @@
         :allPlayers="getPlayers"
         @changehp="test"
         ></Player>
-      <Time></Time>
+      <!-- <Time></Time> -->
       <button @click="startGame" v-if="!getRoomStandByState">Start</button>
     </div>
   </div>
@@ -48,6 +48,7 @@ export default {
     this.$store.dispatch('fillPlayer', this.$route.params.id)
     this.$store.dispatch('findRoomState', this.$route.params.id)
     console.log(this.$route.params)
+    this.playSound()
   },
   methods: {
     test() {
@@ -57,10 +58,18 @@ export default {
     },
     startGame() {
       this.$store.dispatch('startGame', {id: this.$route.params.id, players: this.$store.state.players})
+    },
+    playSound(sound) {
+      let audio = new Audio(require('../assets/bg-sound.mp3'))
+      audio.addEventListener('ended', function() {
+        this.currentTime = 0
+        this.play()
+      }, false)
+      audio.play()
     }
   },
   mounted() {
-    this.playSound('../assets/bg-sound.mp3')
+    
   },
    
 }
