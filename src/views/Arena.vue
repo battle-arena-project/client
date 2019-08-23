@@ -3,13 +3,13 @@
     <div class="arena">
       <Player 
         :player="player" 
-        v-for="player in getPlayers" 
+        v-for="player in allPlayers" 
         :key="player.id" 
         :standbyState="getRoomStandByState"
         :roomId="roomId"
         :allPlayers="getPlayers"
-        v-on:changeHp="changePlayerHp"
-        />
+        @changehp="test"
+        ></Player>
       <Time></Time>
       <button @click="startGame" v-if="!getRoomStandByState">Start</button>
     </div>
@@ -26,12 +26,8 @@ export default {
     return {
       standby: false,
       roomId: this.$route.params.id,
+      allPlayers: []
     };
-  },
-  methods: {
-    changePlayerHp() {
-      this.$store.dispatch('fillPlayer', this.$route.params.id)
-    }
   },
   components : {
     Player,
@@ -41,6 +37,7 @@ export default {
     getPlayers() {
       const players = this.$store.state.players;
       console.log(players)
+      allPlayers = players
       return this.$store.state.players;
     },
     getRoomStandByState() {
@@ -53,6 +50,11 @@ export default {
     console.log(this.$route.params)
   },
   methods: {
+    test() {
+      const players = this.$store.state.players;
+      this.allPlayers = players
+      this.$store.dispatch('fillPlayer', this.$route.params.id)
+    },
     startGame() {
       this.$store.dispatch('startGame', {id: this.$route.params.id, players: this.$store.state.players})
     }
