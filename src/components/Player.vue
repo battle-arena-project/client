@@ -8,12 +8,13 @@
       <div class="hp"></div>
     </div>
     <div class="player">
-      <img src="../assets/knight-idle.gif">
+      <img src="../assets/knight-idle.gif" v-if="status">
+      <img src="../assets/knight-dead.gif" v-else>
     </div>
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
     </div>
-    <div @click="attack" class="player-attack" v-if="player.username !== getUsername">
+    <div @click="attack" class="player-attack" v-if="player.username !== getUsername && status">
       <h2>Attack</h2>
     </div>
   </div>
@@ -23,13 +24,18 @@
 export default {
   data() {
     return {
-      health: 500
+      health: 500,
+      status: true,
     };
   },
   methods: {
     attack() {
       let damage = Math.floor(Math.random() * 6) + 5;
       this.health -= damage;
+      if(this.health <= 0) {
+        this.health = 0;
+        this.status = false
+      }
     }
   },
   props: ['player'],

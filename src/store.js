@@ -48,7 +48,7 @@ export default new Vuex.Store({
         })
         .then(function (docRef) {
           // console.log(docRef, 'ini roomnya <<<<<<<<<<<<<<<<<')
-          commit.fillRoomId(docRef.id)
+          commit("fillRoomId", docRef.id)
         })
         .catch(err => {
           console.log(err)
@@ -112,7 +112,6 @@ export default new Vuex.Store({
         .onSnapshot(doc => {
           context.commit('fill', doc.data().players)
         })
-        .catch(console.log)
     }
   }
 })
