@@ -37,13 +37,13 @@ export default {
   methods: {
     attack() {
       let damage = Math.floor(Math.random() * 6) + 5;
+        this.$emit('changehp')
       this.health -= damage;
       this.$store.dispatch('newHP', {health: this.health, id: this.player.id, username: this.player.username, roomId: this.roomId, players: this.allPlayers})
       if(this.health <= 0) {
         this.health = 0;
         this.status = false
       }
-      this.$emit('changeHp')
       if(this.health > 400){
         this.hpColor = '#1bd82a';
       }else if(this.health > 300){
