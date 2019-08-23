@@ -10,7 +10,7 @@
         :allPlayers="getPlayers"
         @changehp="test"
         ></Player>
-      <Time></Time>
+      <!-- <Time></Time> -->
       <button @click="startGame" v-if="!getRoomStandByState">Start</button>
     </div>
   </div>
