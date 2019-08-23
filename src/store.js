@@ -27,7 +27,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    createRoom({commit}, payload) {
+    createRoom ({ commit }, payload) {
       let dict = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
       let randomId = ''
       for (let i = 0; i < 10; i++) {
@@ -54,7 +54,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    getAllRooms({
+    getAllRooms ({
       commit
     }) {
       let rooms = []
