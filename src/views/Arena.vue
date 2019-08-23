@@ -6,6 +6,7 @@
         v-for="player in getPlayers" 
         :key="player.id" 
         :standbyState="getRoomStandByState"
+        :roomId="roomId"
         />
       <Time></Time>
       <button @click="startGame" v-if="!getRoomStandByState">Start</button>
@@ -21,7 +22,8 @@ import Time from '@/components/Time.vue'
 export default {
   data() {
     return {
-      standby: false
+      standby: false,
+      roomId: this.$route.params.id,
     };
   },
   components : {

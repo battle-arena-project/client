@@ -38,8 +38,7 @@ export default {
     attack() {
       let damage = Math.floor(Math.random() * 6) + 5;
       this.health -= damage;
-      console.log(this.player, "player attack")
-      this.$store.commit('newHP', {health: this.health, id: this.player.id, username: this.player.username})
+      this.$store.commit('newHP', {health: this.health, id: this.player.id, username: this.player.username, roomId: this.roomId})
       if(this.health <= 0) {
         this.health = 0;
         this.status = false
@@ -59,7 +58,7 @@ export default {
     }
 
   },
-  props: ['player', 'standbyState'],
+  props: ['player', 'standbyState', 'roomId'],
   computed: {
     getUsername() {
       return localStorage.getItem('player')
