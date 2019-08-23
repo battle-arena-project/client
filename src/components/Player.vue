@@ -16,18 +16,21 @@
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
     </div>
-    <div @click="attack" class="player-attack" v-if="player.username !== getUsername && status">
+    <div @click="attack" class="player-attack" v-if="player.username !== getUsername && status && clickableAttack">
       <h2>Attack</h2>
     </div>
   </div>
 </template>
 
 <script>
+import { setPriority } from 'os';
+import { setInterval } from 'timers';
 export default {
   data() {
     return {
       health: 500,
       status: true,
+      clickable: true,
       hpColor: '#1bd82a'
     };
   },
@@ -35,10 +38,13 @@ export default {
     attack() {
       let damage = Math.floor(Math.random() * 6) + 5;
       this.health -= damage;
+      console.log(this.player, "player attack")
+      this.$store.commit('newHP', {health: this.health, id: this.player.id, username: this.player.username})
       if(this.health <= 0) {
         this.health = 0;
         this.status = false
       }
+
       if(this.health > 400){
         this.hpColor = '#1bd82a';
       }else if(this.health > 300){
@@ -51,11 +57,15 @@ export default {
         this.hpColor = '#FF0000';
       }
     }
+
   },
   props: ['player'],
   computed: {
     getUsername() {
       return localStorage.getItem('player')
+    },
+    clickableAttack() {
+      return this.$store.state.clickable
     }
   }
 }
