@@ -17,7 +17,7 @@
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
     </div>
-    <div @click="attack" class="player-attack" v-if="player.username !== getUsername && status && clickableAttack">
+    <div @click="attack" class="player-attack" v-if="player.username !== getUsername && status && standbyState">
       <h2>Attack</h2>
     </div>
   </div>
@@ -29,8 +29,9 @@ import { setInterval, setTimeout } from 'timers';
 export default {
   data() {
     return {
-      health: 500,
       status: "stand",
+      health: this.player.hp,
+      status: true,
       clickable: true,
       hpColor: '#1bd82a',
       attackSound: null
@@ -46,14 +47,13 @@ export default {
         }
       }, 400)
       let damage = Math.floor(Math.random() * 6) + 5;
+        this.$emit('changehp')
       this.health -= damage;
-      console.log(this.player, "player attack")
-      this.$store.commit('newHP', {health: this.health, id: this.player.id, username: this.player.username})
+      this.$store.dispatch('newHP', {health: this.health, id: this.player.id, username: this.player.username, roomId: this.roomId, players: this.allPlayers})
       if(this.health <= 0) {
         this.health = 0;
         this.status = 'die'
       }
-
       if(this.health > 400){
         this.hpColor = '#1bd82a';
       }else if(this.health > 300){
@@ -68,7 +68,7 @@ export default {
     }
 
   },
-  props: ['player'],
+  props: ['player', 'standbyState', 'roomId', 'allPlayers'],
   computed: {
     getUsername() {
       return localStorage.getItem('player')

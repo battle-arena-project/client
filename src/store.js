@@ -13,6 +13,7 @@ export default new Vuex.Store({
     clickable: true,
     player: {},
     hp: 500,
+    standby: false,
   },
   mutations: {
     getAllRooms(state, payload) {
@@ -34,16 +35,11 @@ export default new Vuex.Store({
     setPlayer(state, payload){
      state.player = payload
     },
-    newHP(state, payload) {
-      state.player.hp = payload.health
-      for(let i = 0; i < state.players.length; i++) {
-        if(payload.id === state.players[i].id) {
-          state.players[i].hp = state.player.hp
-          // console.log(state.players[i].id, state.player.id  , "ketemu yang sama")
-          break;
-        }
-      }
-      // console.log(state.players, "semuaaaaaaaaaaaaaaaaa")
+    setStandByState(state, payload) {
+      state.standby = payload
+    },
+    syncPlayers(state, payload) {
+      state.players = payload
     }
   },
   actions: {
@@ -58,7 +54,8 @@ export default new Vuex.Store({
         .add({
           name: payload.roomName,
           players: [],
-          status: true
+          status: true,
+          standby: false
         })
         .then(function (docRef) {
           // console.log(docRef, 'ini roomnya <<<<<<<<<<<<<<<<<')
@@ -67,12 +64,12 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
-    },
-    getAllRooms ({
-      commit
-    }) {
-      let rooms = []
-      db.collection('rooms')
+      },
+      getAllRooms ({
+        commit
+      }) {
+        let rooms = []
+        db.collection('rooms')
         .onSnapshot(querySnapshot => {
           querySnapshot.forEach(doc => {
             let data = {
@@ -81,7 +78,7 @@ export default new Vuex.Store({
             };
             rooms.push(data)
           });
-
+          
           commit('emptyRooms')
           commit('getAllRooms', rooms)
           rooms = []
@@ -131,18 +128,41 @@ export default new Vuex.Store({
     },
     startGame(context, payload) {
         setTimeout(function() {
-            context.commit('clickableAttack', false)
-            // console.log(payload)
-            db.collection('rooms')
-              .doc(payload.id)
-              .update({
-                players: payload.players
-              })
-            setTimeout(function() {
-              context.commit('clickableAttack', true)
-            }, 5000)
+
+        db.collection('rooms')
+          .doc(payload.id)
+          .update({
+            players: payload.players,
+            standby: true,
+          })
+
         }, 5000)
       
-    } 
+    },
+    findRoomState(context, payload) {
+      db.collection('rooms').doc(payload)
+        .onSnapshot(doc => {
+          context.commit('setStandByState', doc.data().standby)
+        })
+    },
+    newHP(context, payload) {
+      // console.log(payload.players)
+      // context.commit('setPlayerHp', payload.health)
+      // // state.player.hp = payload.health
+      for(let i = 0; i < payload.players.length; i++) {
+        if(payload.id === payload.players[i].id) {
+          payload.players[i].hp = payload.health
+          break;
+        }
+      }
+      console.log(payload.players)
+      db.collection('rooms')
+        .doc(payload.roomId)
+        .update({
+          players: payload.players,
+        })
+
+      context.commit('syncPlayers', payload.players)
+    },
   }
 })
