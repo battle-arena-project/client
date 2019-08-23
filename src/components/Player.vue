@@ -8,7 +8,8 @@
       <div class="hp"></div>
     </div>
     <div class="player">
-      <img src="../assets/knight-idle.gif">
+      <img src="../assets/knight-idle.gif" v-if="status">
+      <img src="../assets/knight-dead.gif" v-else>
     </div>
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
