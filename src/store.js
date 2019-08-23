@@ -28,7 +28,7 @@ export default new Vuex.Store({
   },
   actions: {
     createRoom({commit}, payload) {
-      let dict = 'abcdefghijklmnopqrstuvwxyz'
+      let dict = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
       let randomId = ''
       for (let i = 0; i < 10; i++) {
         randomId += dict[Math.floor(Math.random() * dict.length)]
@@ -108,8 +108,8 @@ export default new Vuex.Store({
         })
     },
     fillPlayer(context, id) {
-      db.collection('rooms').doc(id).get()
-        .then(doc => {
+      db.collection('rooms').doc(id)
+        .onSnapshot(doc => {
           context.commit('fill', doc.data().players)
         })
         .catch(console.log)

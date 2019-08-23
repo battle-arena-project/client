@@ -1,7 +1,7 @@
 <template>
   <div class="player-container">
     <div class="username">
-      <!-- <h1>{{health}}</h1> -->
+      <h1>{{health}}</h1>
       <h2>{{player.username}}</h2>
     </div>
     <div class="hp-container">
@@ -13,7 +13,7 @@
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
     </div>
-    <div @click="damage" class="player-attack">
+    <div @click="attack" class="player-attack" v-if="player.username !== getUsername">
       <h2>Attack</h2>
     </div>
   </div>
@@ -23,15 +23,21 @@
 export default {
   data() {
     return {
-      health: 100
+      health: 500
     };
   },
   methods: {
-    damage() {
-      this.health -= 1;
+    attack() {
+      let damage = Math.floor(Math.random() * 6) + 5;
+      this.health -= damage;
     }
   },
-  props: ['player']
+  props: ['player'],
+  computed: {
+    getUsername() {
+      return localStorage.getItem('player')
+    }
+  }
 }
 </script>
 

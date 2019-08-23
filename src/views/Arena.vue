@@ -2,6 +2,9 @@
   <div id="arena-container">
     <div class="arena">
       <Player :player="player" v-for="player in getPlayers" :key="player.id"></Player>
+      <div @click="attack" class="player-attack" v-if="player.username !== getUsername">
+      <h2>Attack</h2>
+    </div>
       <Time></Time>
     </div>
   </div>

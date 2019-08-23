@@ -42,6 +42,7 @@ export default {
     joinRoom(id) {
       this.isClickJoin = !this.isClickJoin;
       this.$store.dispatch("joinRoom", { username: this.username, roomId: id });
+      localStorage.setItem('player', this.username)
       this.$router.push(`/arena/${id}`);
     }
   }
