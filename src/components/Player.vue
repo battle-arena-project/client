@@ -16,7 +16,7 @@
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
     </div>
-    <div @click="attack" class="player-attack" v-if="player.username !== getUsername && status && clickableAttack">
+    <div @click="attack" class="player-attack" v-if="player.username !== getUsername && status && standbyState">
       <h2>Attack</h2>
     </div>
   </div>
@@ -59,14 +59,15 @@ export default {
     }
 
   },
-  props: ['player'],
+  props: ['player', 'standbyState'],
   computed: {
     getUsername() {
       return localStorage.getItem('player')
     },
     clickableAttack() {
       return this.$store.state.clickable
-    }
+    },
+ 
   }
 }
 </script>

@@ -13,6 +13,7 @@ export default new Vuex.Store({
     clickable: true,
     player: {},
     hp: 500,
+    standby: false,
   },
   mutations: {
     getAllRooms(state, payload) {
@@ -44,7 +45,10 @@ export default new Vuex.Store({
         }
       }
       // console.log(state.players, "semuaaaaaaaaaaaaaaaaa")
-    }
+    },
+    setStandByState(state, payload) {
+      state.standby = payload
+    } 
   },
   actions: {
     createRoom ({ commit }, payload) {
@@ -58,7 +62,8 @@ export default new Vuex.Store({
         .add({
           name: payload.roomName,
           players: [],
-          status: true
+          status: true,
+          standby: false
         })
         .then(function (docRef) {
           // console.log(docRef, 'ini roomnya <<<<<<<<<<<<<<<<<')
@@ -67,12 +72,12 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
-    },
-    getAllRooms ({
-      commit
-    }) {
-      let rooms = []
-      db.collection('rooms')
+      },
+      getAllRooms ({
+        commit
+      }) {
+        let rooms = []
+        db.collection('rooms')
         .onSnapshot(querySnapshot => {
           querySnapshot.forEach(doc => {
             let data = {
@@ -81,7 +86,7 @@ export default new Vuex.Store({
             };
             rooms.push(data)
           });
-
+          
           commit('emptyRooms')
           commit('getAllRooms', rooms)
           rooms = []
@@ -131,18 +136,22 @@ export default new Vuex.Store({
     },
     startGame(context, payload) {
         setTimeout(function() {
-            context.commit('clickableAttack', false)
-            // console.log(payload)
-            db.collection('rooms')
-              .doc(payload.id)
-              .update({
-                players: payload.players
-              })
-            setTimeout(function() {
-              context.commit('clickableAttack', true)
-            }, 5000)
+
+        db.collection('rooms')
+          .doc(payload.id)
+          .update({
+            players: payload.players,
+            standby: true,
+          })
+
         }, 5000)
       
+    },
+    findRoomState(context, payload) {
+      db.collection('rooms').doc(payload)
+        .onSnapshot(doc => {
+          context.commit('setStandByState', doc.data().standby)
+        })
     } 
   }
 })
