@@ -15,7 +15,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/arena',
+      path: '/arena/:id',
       name: 'arena',
       component: Arena
     }

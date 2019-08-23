@@ -1,10 +1,10 @@
 <template>
   <div id="arena-container">
     <div class="arena">
-      <Player></Player>
-      <Player></Player>
-      <Player></Player>
-      <Player></Player>
+      <Player :player="player" v-for="player in getPlayers" :key="player.id"></Player>
+      <div @click="attack" class="player-attack" v-if="player.username !== getUsername">
+      <h2>Attack</h2>
+    </div>
       <Time></Time>
     </div>
   </div>
@@ -16,9 +16,25 @@ import Player from '@/components/Player.vue'
 import Time from '@/components/Time.vue'
 
 export default {
+  data() {
+    return {
+      
+    };
+  },
   components : {
     Player,
     Time
+  },
+  computed: {
+    getPlayers() {
+      const players = this.$store.state.players;
+      console.log(players)
+      return this.$store.state.players;
+    }
+  },
+  created() {
+    this.$store.dispatch('fillPlayer', this.$route.params.id)
+    console.log(this.$route.params)
   }
 }
 </script>
