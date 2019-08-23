@@ -5,8 +5,8 @@
     </div>
     <div class="hp-container">
       <div class="hp" :style="
-        'width:'+ (health/500) * 100 + '%;background-color:' + hpColor +' !important;'">
-        <h1>{{health}}</h1>
+        'width:'+ (player.hp/500) * 100 + '%;background-color:' + hpColor +' !important;'">
+        <h1>{{player.hp}}</h1>
       </div>
     </div>
     <div class="player">
