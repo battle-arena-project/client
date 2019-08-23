@@ -1,9 +1,14 @@
 <template>
   <div id="arena-container">
     <div class="arena">
-      <Player :player="player" v-for="player in getPlayers" :key="player.id"></Player>
+      <Player 
+        :player="player" 
+        v-for="player in getPlayers" 
+        :key="player.id" 
+        :standbyState="getRoomStandByState"
+        />
       <Time></Time>
-      <button @click="startGame">Start</button>
+      <button @click="startGame" v-if="!getRoomStandByState">Start</button>
     </div>
   </div>
 
@@ -16,7 +21,7 @@ import Time from '@/components/Time.vue'
 export default {
   data() {
     return {
-      
+      standby: false
     };
   },
   components : {
@@ -28,10 +33,14 @@ export default {
       const players = this.$store.state.players;
       console.log(players)
       return this.$store.state.players;
+    },
+    getRoomStandByState() {
+      return this.$store.state.standby
     }
   },
   created() {
     this.$store.dispatch('fillPlayer', this.$route.params.id)
+    this.$store.dispatch('findRoomState', this.$route.params.id)
     console.log(this.$route.params)
   },
   methods: {
@@ -42,7 +51,7 @@ export default {
   mounted() {
     this.playSound('../assets/bg-sound.mp3')
   },
-
+   
 }
 </script>
 
