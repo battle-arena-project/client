@@ -43,7 +43,7 @@ export default {
         this.health = 0;
         this.status = false
       }
-
+      this.$emit('changeHp')
       if(this.health > 400){
         this.hpColor = '#1bd82a';
       }else if(this.health > 300){
