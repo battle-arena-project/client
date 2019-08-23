@@ -38,7 +38,11 @@ export default {
     startGame() {
       this.$store.dispatch('startGame', {id: this.$route.params.id, players: this.$store.state.players})
     }
-  }
+  },
+  mounted() {
+    this.playSound('../assets/bg-sound.mp3')
+  },
+
 }
 </script>
 
@@ -48,11 +52,14 @@ export default {
 #arena-container{
   font-family: 'Knewave', cursive;
   background-image: url('../assets/arena-bg.jpg');
-  width: 100vw;
-  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
   top: 0;
   position: fixed !important;
-  z-index: 999 !important;
+  z-index: 2 !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,7 +69,8 @@ img{
 }
 .arena{
   width: 1000px;
-  height: 600px;
+  height: 500px;
   position: relative;
+  bottom: 30px;
 }
 </style>

@@ -1,11 +1,13 @@
 <template>
   <div class="player-container">
     <div class="username">
-      <h1>{{health}}</h1>
       <h2>{{player.username}}</h2>
     </div>
     <div class="hp-container">
-      <div class="hp"></div>
+      <div class="hp" :style="
+        'width:'+ (health/500) * 100 + '%;background-color:' + hpColor +' !important;'">
+        <h1>{{health}}</h1>
+      </div>
     </div>
     <div class="player">
       <img src="../assets/knight-idle.gif" v-if="status">
@@ -29,6 +31,7 @@ export default {
       health: 500,
       status: true,
       clickable: true,
+      hpColor: '#1bd82a'
     };
   },
   methods: {
@@ -41,7 +44,20 @@ export default {
         this.health = 0;
         this.status = false
       }
-    },
+
+      if(this.health > 400){
+        this.hpColor = '#1bd82a';
+      }else if(this.health > 300){
+        this.hpColor = '#C5FF00';
+      }else if(this.health > 200){
+        this.hpColor = '#FFE400';
+      }else if(this.health > 100){
+        this.hpColor = '#FF8000';
+      }else{
+        this.hpColor = '#FF0000';
+      }
+    }
+
   },
   props: ['player'],
   computed: {
@@ -121,6 +137,15 @@ export default {
   width: 80%;
   height: 100%;
   background-color: #1bd82a;
+}
+.hp h1{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14pt;
+  color: #ffffff;
+  -webkit-text-stroke: 1px red;
 }
 .player-attack{
   background: linear-gradient(90deg, #fa7900, rgb(224, 30, 17));
