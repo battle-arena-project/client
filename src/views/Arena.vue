@@ -3,7 +3,7 @@
     <div class="arena">
       <Player 
         :player="player" 
-        v-for="player in allPlayers" 
+        v-for="player in getPlayers" 
         :key="player.id" 
         :standbyState="getRoomStandByState"
         :roomId="roomId"
@@ -37,7 +37,7 @@ export default {
     getPlayers() {
       const players = this.$store.state.players;
       console.log(players)
-      allPlayers = players
+      this.allPlayers = players
       return this.$store.state.players;
     },
     getRoomStandByState() {
