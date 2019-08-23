@@ -7,6 +7,7 @@
         :key="player.id" 
         :standbyState="getRoomStandByState"
         :roomId="roomId"
+        :allPlayers="getPlayers"
         v-on:changeHp="changePlayerHp"
         />
       <Time></Time>
