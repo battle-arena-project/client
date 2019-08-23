@@ -35,25 +35,12 @@ export default new Vuex.Store({
     setPlayer(state, payload){
      state.player = payload
     },
-    newHP(state, payload) {
-      state.player.hp = payload.health
-      for(let i = 0; i < state.players.length; i++) {
-        if(payload.id === state.players[i].id) {
-          state.players[i].hp = state.player.hp
-          // console.log(state.players[i].id, state.player.id  , "ketemu yang sama")
-          break;
-        }
-      }
-      db.collection('rooms')
-          .doc(payload.roomId)
-          .update({
-            players: payload.players,
-            standby: true,
-          })
-    },
     setStandByState(state, payload) {
       state.standby = payload
-    } 
+    },
+    syncPlayers(state, payload) {
+      
+    }
   },
   actions: {
     createRoom ({ commit }, payload) {
@@ -157,6 +144,23 @@ export default new Vuex.Store({
         .onSnapshot(doc => {
           context.commit('setStandByState', doc.data().standby)
         })
-    } 
+    },
+    newHP(context, payload) {
+      // console.log(payload.players)
+      // context.commit('setPlayerHp', payload.health)
+      // // state.player.hp = payload.health
+      for(let i = 0; i < payload.players.length; i++) {
+        if(payload.id === payload.players[i].id) {
+          payload.players[i].hp = payload.health
+          break;
+        }
+      }
+      console.log(payload.players)
+      db.collection('rooms')
+        .doc(payload.roomId)
+        .update({
+          players: payload.players,
+        })
+    },
   }
 })
