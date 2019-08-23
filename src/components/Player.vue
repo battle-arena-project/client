@@ -10,8 +10,9 @@
       </div>
     </div>
     <div class="player">
-      <img src="../assets/knight-idle.gif" v-if="status">
-      <img src="../assets/knight-dead.gif" v-else>
+      <img src="../assets/attack2.gif" v-if="status==='attack'">
+      <img src="../assets/die.gif" v-else-if="status==='die'">
+      <img src="../assets/stand.gif" v-else>
     </div>
     <div class="position">
       <img src="../assets/player-position.png" alt="" srcset="">
@@ -24,25 +25,33 @@
 
 <script>
 import { setPriority } from 'os';
-import { setInterval } from 'timers';
+import { setInterval, setTimeout } from 'timers';
 export default {
   data() {
     return {
       health: 500,
-      status: true,
+      status: "stand",
       clickable: true,
-      hpColor: '#1bd82a'
+      hpColor: '#1bd82a',
+      attackSound: null
     };
   },
   methods: {
     attack() {
+      this.status = 'attack'
+      this.attackSound.play()
+      setTimeout( () => {
+        if(this.health > 0){
+          this.status = 'stand'
+        }
+      }, 400)
       let damage = Math.floor(Math.random() * 6) + 5;
       this.health -= damage;
       console.log(this.player, "player attack")
       this.$store.commit('newHP', {health: this.health, id: this.player.id, username: this.player.username})
       if(this.health <= 0) {
         this.health = 0;
-        this.status = false
+        this.status = 'die'
       }
 
       if(this.health > 400){
@@ -67,6 +76,9 @@ export default {
     clickableAttack() {
       return this.$store.state.clickable
     }
+  },
+  created(){
+    this.attackSound = new Audio(require('../assets/spear.mp3'))
   }
 }
 </script>
@@ -81,6 +93,9 @@ export default {
   animation-iteration-count: infinite;
   animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   animation-direction: alternate-reverse;
+}
+.player img{
+  width: unset !important;
 }
 @keyframes animate-position{
   from{
